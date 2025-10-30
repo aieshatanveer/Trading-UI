@@ -1,7 +1,8 @@
 pipeline {
     agent any
+
     tools {
-     nodejs "NodeJS-20" //point_left:if need use the new Node.js 20 installation
+        nodejs "NodeJS-20" // Make sure this name matches Jenkins Tool Configuration
     }
 
     stages {
@@ -16,8 +17,14 @@ pipeline {
                 sh '''
                     echo "Cleaning old modules..."
                     rm -rf node_modules package-lock.json
+
+                    echo "Node version in use:"
+                    node -v
+                    npm -v
+
                     echo "Installing dependencies..."
-                    npm install
+                    # Use --force to bypass peer dependency conflicts
+                    npm install --force
                 '''
             }
         }
@@ -26,6 +33,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Building the project..."
+                    # Disable CI mode to prevent interactive failures
                     CI=false npm run build
                 '''
             }
@@ -40,7 +48,7 @@ pipeline {
 
     post {
         failure {
-            echo 'Build failed. Please check Jenkins console output for errors.'
+            echo 'Build failed. Please check Jenkins console output for details.'
         }
     }
 }
