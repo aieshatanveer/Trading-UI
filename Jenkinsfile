@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS14" // Check exact tool name in Jenkins Global Tool Config
+        nodejs "NodeJS14" 
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'npm test || echo "⚠️ No tests found or failed"'
+                sh 'npm test || echo ":warning: No tests found or failed"'
             }
         }
 
@@ -38,12 +38,8 @@ pipeline {
     }
 
     post {
-        success {
-            echo '✅ Node.js pipeline finished successfully.'
-        }
-        failure {
-            echo '❌ Node.js pipeline failed - check console output.'
-        }
+        success {echo ':white_check_mark:Node.js pipeline finished successfully.'}
+        failure {echo ':x:Node.js pipeline failed - check console output.'}
     }
 }
 
