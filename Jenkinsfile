@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+     nodejs "NodeJS-20" //point_left:if need use the new Node.js 20 installation
+    }
 
     stages {
         stage('Checkout') {
@@ -30,14 +33,14 @@ pipeline {
 
         stage('Post Build') {
             steps {
-                echo '✅ Build completed successfully!'
+                echo 'Build completed successfully!'
             }
         }
     }
 
     post {
         failure {
-            echo '❌ Build failed. Please check Jenkins console output for errors.'
+            echo 'Build failed. Please check Jenkins console output for errors.'
         }
     }
 }
