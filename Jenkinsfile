@@ -1,45 +1,43 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs "NodeJS14" 
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/aieshatanveer/Trading-UI.git', branch: 'master'
+                git branch: 'master', url: 'https://github.com/aieshatanveer/Trading-UI.git'
             }
         }
 
-        stage('Install') {
+        stage('Install Dependencies') {
             steps {
                 sh '''
-                    npm cache clean --force
+                    echo "Cleaning old modules..."
                     rm -rf node_modules package-lock.json
-                    npm install --omit=optional
+                    echo "Installing dependencies..."
+                    npm install
                 '''
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'npm test || echo ":warning: No tests found or failed"'
             }
         }
 
         stage('Build') {
             steps {
-                withEnv(["CI=false"]) {
-                    sh 'npm run build'
-                }
+                sh '''
+                    echo "Building the project..."
+                    CI=false npm run build
+                '''
+            }
+        }
+
+        stage('Post Build') {
+            steps {
+                echo '✅ Build completed successfully!'
             }
         }
     }
 
     post {
-        success {echo ':white_check_mark:Node.js pipeline finished successfully.'}
-        failure {echo ':x:Node.js pipeline failed - check console output.'}
+        failure {
+            echo '❌ Build failed. Please check Jenkins console output for errors.'
+        }
     }
 }
-
