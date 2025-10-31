@@ -14,18 +14,15 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                    echo "Cleaning old modules..."
-                    rm -rf node_modules package-lock.json
+                timeout(time: 30, unit: 'MINUTES') { // allows npm install up to 30 mins
+                    sh '''
+                        echo "Cleaning old modules..."
+                        rm -rf node_modules package-lock.json
 
-                    echo "Node version in use:"
-                    node -v
-                    npm -v
-
-                    echo "Installing dependencies..."
-                    # Use --force to bypass peer dependency conflicts
-                    npm install --force
-                '''
+                        echo "Installing dependencies..."
+                        npm install --force
+                    '''
+                }
             }
         }
 
@@ -52,3 +49,4 @@ pipeline {
         }
     }
 }
+
