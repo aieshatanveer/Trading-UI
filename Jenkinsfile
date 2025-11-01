@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'main', url: 'https://github.com/aieshatanveer/Trading-UI.git'
+                git branch: 'master', url: 'https://github.com/aieshatanveer/Trading-UI.git'
             }
         }
 
