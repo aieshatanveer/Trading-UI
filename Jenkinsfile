@@ -29,7 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                # Example: run your app
+                // Example: run your app
                 sh 'nohup node app.js > output.log 2>&1 &'
             }
         }
