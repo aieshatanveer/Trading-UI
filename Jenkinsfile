@@ -4,51 +4,34 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Cloning repository...'
-                git branch: 'master', url: 'https://github.com/aieshatanveer/Trading-UI.git'
+                git branch: 'master', url: 
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing Node.js dependencies...'
-                sh '''
-                    # Clean previous installs
-                    rm -rf node_modules package-lock.json
-                    # Install dependencies
-                    npm install
-                '''
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'Building the application...'
-                sh 'npm run build || echo "No build script defined, skipping..."'
+                sh 'npm install'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                sh 'npm test || echo "No test script found, skipping tests..."'
+                sh 'npm test || echo "No tests defined"'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the Node.js app...'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deployment stage (customize as needed)...'
-                // Example: sh 'scp -r dist/ user@server:/var/www/html'
+                echo 'Deploying application...'
+                # Example: run your app
+                sh 'nohup node app.js > output.log 2>&1 &'
             }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Build completed successfully!'
-        }
-        failure {
-            echo '❌ Build failed. Please check the logs.'
         }
     }
 }
